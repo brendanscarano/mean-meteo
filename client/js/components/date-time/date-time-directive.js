@@ -1,11 +1,24 @@
 (function() {
   'use strict';
 
-  function dateTime( $timeout ) {
+  function dateTime( $timeout, $http ) {
 
     function dateTimeCtrl() {
 
-      console.log('loading up date time directive!')
+
+      navigator.geolocation.getCurrentPosition(function(response) {
+
+        console.log(response);
+        $http.get('/weather/' + response.coords.latitude + '/' + response.coords.longitude).then(function(res) {
+
+          console.log(res);
+
+        })
+
+      });
+
+
+
       var vm = this;
 
       vm.todaysDate = moment().format('dddd MMMM DD YYYY');
@@ -41,6 +54,6 @@
 
   angular
     .module('DateTimeDirective', [])
-    .directive('dateTime', ['$timeout', dateTime]);
+    .directive('dateTime', ['$timeout', '$http', dateTime]);
 
 })();
