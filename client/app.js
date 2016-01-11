@@ -1,3 +1,6 @@
+angular.module('ngApp', [
+  'DateTimeDirective'
+]);
 (function() {
   'use strict';
 
@@ -55,3 +58,4 @@
     .directive('dateTime', ['$timeout', '$http', dateTime]);
 
 })();
+//# sourceMappingURL=app.js.map
