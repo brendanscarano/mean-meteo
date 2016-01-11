@@ -11,7 +11,7 @@
         console.log(response);
         $http.get('/weather/' + response.coords.latitude + '/' + response.coords.longitude).then(function(res) {
 
-          console.log(res);
+          console.log(JSON.parse(res.data.body));
 
         })
 
