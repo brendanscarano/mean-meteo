@@ -5,18 +5,6 @@
 
     function dateTimeCtrl() {
 
-
-      navigator.geolocation.getCurrentPosition(function(response) {
-
-        console.log(response);
-        $http.get('/weather/' + response.coords.latitude + '/' + response.coords.longitude).then(function(res) {
-
-          console.log(JSON.parse(res.data.body));
-
-        })
-
-      });
-
       var vm = this;
 
       vm.todaysDate = moment().format('dddd MMMM DD YYYY');
