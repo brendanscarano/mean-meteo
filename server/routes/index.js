@@ -15,7 +15,15 @@
     console.log('hitting weather route');
     console.log(req.params);
 
-    res.send('sending back weather data');
+    var latitude = req.params.lat;
+
+    var longitude = req.params.lng;
+
+    request('https://api.forecast.io/forecast/a1bfca2cfb7db1f70eaaa31ebf6251d5/' + latitude + ',' + longitude, function(error, response, body) {
+
+      res.send(response);
+
+    });
 
   });
  
