@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  function dateTime( $timeout, $http ) {
+  function dateTime( $timeout ) {
 
     function dateTimeCtrl() {
 
@@ -34,6 +34,6 @@
 
   angular
     .module('DateTimeDirective', [])
-    .directive('dateTime', ['$timeout', '$http', dateTime]);
+    .directive('dateTime', ['$timeout', dateTime]);
 
 })();
