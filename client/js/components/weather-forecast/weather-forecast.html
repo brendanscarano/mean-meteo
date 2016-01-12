@@ -1,0 +1,38 @@
+<!-- <span class="user-location">{{vm.weatherData.location}}</span> -->
+
+<div>
+
+  <ul class="forecast-list">
+
+      <li class="forecast-list__list-item col-md-1"
+          ng-repeat="day in vm.hourlyForecast.data track by $index">
+        <div>
+          <!-- {{day.time | convertHourlyTime}}<br /> -->
+          {{day.time}}<br />
+          <!-- <i class="{{day.icon | convertIconEmoji}}"></i><br /> -->
+          <!-- {{vm.Math.round(day.temperature)}}<br /> -->
+          {{day.temperature}}<br />
+        </div>
+      </li>
+
+  </ul>
+<!-- 
+  <ul class="forecast-list">
+
+      <li class="forecast-list__list-item col-md-1"
+          ng-repeat="day in vm.weatherData.dailyForecast track by $index"
+          ng-mouseover="showSummary = true" ng-mouseleave="showSummary = false">
+        {{day.time | convertDailyTime}}<br />
+        <i class="{{day.icon | convertIconEmoji}}"></i><br />
+
+        {{vm.Math.floor(day.temperatureMax)}} / {{vm.Math.floor(day.temperatureMin)}}
+
+        <div ng-show="showSummary">
+          {{day.summary}}<br />
+        </div>
+
+      </li>
+
+  </ul>
+ -->
+</div>

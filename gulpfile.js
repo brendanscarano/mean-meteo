@@ -11,6 +11,7 @@
     rename     = require('gulp-rename'),
     maps       = require('gulp-sourcemaps'),
     _paths     = ['server/**/*.js', 'client/js/*.js'],
+    del        = require('del'),
     templateCache = require('gulp-angular-templatecache');
 
 
@@ -26,26 +27,28 @@
     .pipe(gulp.dest('client'));
   })
 
-  gulp.task('minifyScripts',['concatScripts'], function() {
+  gulp.task('templateCache', ['concatScripts'], function () {
+    return gulp.src('client/js/**/*.html')
+      .pipe(templateCache({standalone: true}))
+      .pipe(gulp.dest('public'));
+  });
+
+  gulp.task('minifyScripts',['templateCache'], function() {
     return gulp.src('client/js/app.js')
       .pipe(uglify())
       .pipe(rename('app.min.js'))
       .pipe(gulp.dest('client'));
   })
 
-  gulp.task('templateCache', function () {
-    return gulp.src('client/js/**/*.html')
-      .pipe(templateCache({standalone: true}))
-      .pipe(gulp.dest('public'));
+  gulp.task('clean', function() {
+    del(['client/app*.js*']);
   });
  
   gulp.task('watch', function() {
-    gulp.watch('client/js/**/*.js', ['concatScripts'])
+    gulp.watch('client/js/**/*.js', ['minifyScripts'])
   })
 
-  gulp.task('clean', function() {})
-
-  gulp.task('build', ['templateCache', 'minifyScripts'], function() {
+  gulp.task('build', ['minifyScripts'], function() {
     return gulp.src(['client/js/app.min.js', 'index.html'], {base: './'})
           .pipe(gulp.dest('dist'));
   })

@@ -27,13 +27,7 @@
       controller: dateTimeCtrl,
       controllerAs: 'vm',
       scope: {},
-      // templateUrl: 'client/js/components/date-time/date-time.html'
-      template: [
-        '<div class="date-time-wrapper">',
-          '<span class="date-time-wrapper__time">{{vm.currentTime}}</span><br />',
-          '<span class="date-time-wrapper__date">{{vm.todaysDate}}</span>',
-        '</div>'
-      ].join('')
+      templateUrl: 'components/date-time/date-time.html'
     };
 
   }
