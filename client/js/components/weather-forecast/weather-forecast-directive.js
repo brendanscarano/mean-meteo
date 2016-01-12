@@ -7,15 +7,19 @@
 
       var vm = this;
 
-      console.log('testing');
+      vm.Math = window.Math;
 
       navigator.geolocation.getCurrentPosition(function(response) {
 
         $http.get('/weather/' + response.coords.latitude + '/' + response.coords.longitude).then(function(res) {
 
           console.log(JSON.parse(res.data.body));
+
           var data = JSON.parse(res.data.body);
+
           vm.hourlyForecast = data.hourly;
+
+          vm.dailyForecast = data.daily;
 
         })
 
@@ -37,7 +41,7 @@
   }
 
   angular
-    .module('WeatherForecastDirective', [])
+    .module('WeatherForecastDirective', ['WeatherForecastFilters'])
     .directive('weatherForecast', ['$timeout', '$http', dateTime]);
 
 })();

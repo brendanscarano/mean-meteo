@@ -5,25 +5,23 @@
   <ul class="forecast-list">
 
       <li class="forecast-list__list-item col-md-1"
-          ng-repeat="day in vm.hourlyForecast.data track by $index">
+          ng-repeat="day in vm.hourlyForecast.data | limitTo: 8 track by $index">
         <div>
-          <!-- {{day.time | convertHourlyTime}}<br /> -->
-          {{day.time}}<br />
+          {{day.time | convertHourlyTime}}<br />
           <!-- <i class="{{day.icon | convertIconEmoji}}"></i><br /> -->
-          <!-- {{vm.Math.round(day.temperature)}}<br /> -->
-          {{day.temperature}}<br />
+          {{vm.Math.round(day.temperature)}}<br />
         </div>
       </li>
 
   </ul>
-<!-- 
+
   <ul class="forecast-list">
 
       <li class="forecast-list__list-item col-md-1"
-          ng-repeat="day in vm.weatherData.dailyForecast track by $index"
+          ng-repeat="day in vm.dailyForecast.data | limitTo: 5 track by $index"
           ng-mouseover="showSummary = true" ng-mouseleave="showSummary = false">
         {{day.time | convertDailyTime}}<br />
-        <i class="{{day.icon | convertIconEmoji}}"></i><br />
+        <!-- <i class="{{day.icon | convertIconEmoji}}"></i><br /> -->
 
         {{vm.Math.floor(day.temperatureMax)}} / {{vm.Math.floor(day.temperatureMin)}}
 
@@ -34,5 +32,5 @@
       </li>
 
   </ul>
- -->
+
 </div>
