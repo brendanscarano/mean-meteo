@@ -1,0 +1,15 @@
+body {
+  background-color: #FDF3E7;
+}
+
+.app-wrapper {
+  text-align: center;
+}
+
+.date-time-wrapper {
+  margin-top: 6%;
+  text-align: center;
+  &__time {
+    font-size: 46px;
+  }
+}

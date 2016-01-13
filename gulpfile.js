@@ -8,12 +8,14 @@
     livereload     = require('gulp-livereload'),
     concat         = require('gulp-concat'),
     uglify         = require('gulp-uglify'),
+    sass           = require('gulp-sass'),
     rename         = require('gulp-rename'),
     maps           = require('gulp-sourcemaps'),
     htmlreplace    = require('gulp-html-replace'),
     mainbowerFiles = require('main-bower-files'),
     del            = require('del'),
     nodemon        = require('gulp-nodemon'),
+    babel          = require('gulp-babel'),
     templateCache  = require('gulp-angular-templatecache'),
     _paths         = ['server/**/*.js', 'client/js/*.js'];
 
@@ -26,7 +28,9 @@
     ])
     .pipe(maps.init())
     .pipe(concat('app.js'))
-    // run babel here!
+    // .pipe(babel({
+    //   presets: ['es2015']
+    // }))
     .pipe(maps.write('./'))
     .pipe(gulp.dest('client'));
   })
@@ -42,6 +46,14 @@
       // .pipe(uglify())
       .pipe(rename('app.min.js'))
       .pipe(gulp.dest('client'));
+  })
+
+  gulp.task('compileSass', function() {
+    return gulp.src('client/js/**/*.scss')
+      .pipe(maps.init())
+      .pipe(sass())
+      .pipe(rename('application.css'))
+      .pipe(gulp.dest('client/css'));
   })
 
   gulp.task('start', function() {
@@ -82,7 +94,7 @@
 
   // base option keeps directories in check
   gulp.task('build', ['replaceJS', 'minifyScripts'], function() {
-    return gulp.src(['client/app.min.js'], {base: './'})
+    return gulp.src(['client/app.min.js', 'node_modules', 'server/**/*'], {base: './'})
           .pipe(gulp.dest('dist'));
   })
 
