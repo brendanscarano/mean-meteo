@@ -51,6 +51,7 @@
   gulp.task('compileSass', function() {
     return gulp.src('client/js/**/*.scss')
       .pipe(maps.init())
+      .pipe(concat('app.js'))
       .pipe(sass())
       .pipe(rename('application.css'))
       .pipe(gulp.dest('client/css'));
