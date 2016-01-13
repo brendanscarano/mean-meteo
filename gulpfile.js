@@ -13,17 +13,20 @@
     htmlreplace    = require('gulp-html-replace'),
     mainbowerFiles = require('main-bower-files'),
     del            = require('del'),
+    nodemon        = require('gulp-nodemon'),
     templateCache  = require('gulp-angular-templatecache'),
     _paths         = ['server/**/*.js', 'client/js/*.js'];
 
 
   gulp.task('concatScripts', function() {
     return gulp.src([
+      'client/lib/**/*',
       'client/js/**/*.js',
       'client/public/*.js'
     ])
     .pipe(maps.init())
     .pipe(concat('app.js'))
+    // run babel here!
     .pipe(maps.write('./'))
     .pipe(gulp.dest('client'));
   })
@@ -36,33 +39,41 @@
 
   gulp.task('minifyScripts',['templateCache'], function() {
     return gulp.src('client/app.js')
-      .pipe(uglify())
+      // .pipe(uglify())
       .pipe(rename('app.min.js'))
       .pipe(gulp.dest('client'));
   })
 
-  gulp.task('bower', function() {
-    // return gulp.src(mainbowerFiles(), {
-    //     base: 'client/lib'
-    //   })
-    return gulp.src(mainbowerFiles({ paths: {
-        bowerJson: 'bower.json',
-        bowerDirectory: 'client/lib'
-      }}))
-      .pipe(rename('bower.min.js'))
-      .pipe(gulp.dest('client'));
+  gulp.task('start', function() {
+    nodemon({
+      script: 'server/app.js',
+      ext: 'js html',
+      env: { 'NODE_ENV': 'development' }
+    })
   })
+
+  // gulp.task('bower', function() {
+  //   // return gulp.src(mainbowerFiles(), {
+  //   //     base: 'client/lib'
+  //   //   })
+  //   return gulp.src(mainbowerFiles({ paths: {
+  //       bowerJson: 'bower.json',
+  //       bowerDirectory: 'client/lib'
+  //     }}))
+  //     .pipe(rename('bower.min.js'))
+  //     .pipe(gulp.dest('client'));
+  // })
 
   gulp.task('clean', function() {
     del(['dist', 'client/app*.js*', 'client/bower.min.js']);
   });
  
   gulp.task('watch', function() {
-    gulp.watch('client/js/**/*.js', ['minifyScripts'])
+    gulp.watch('client/js/**/*', ['minifyScripts'])
   })
 
   gulp.task('replaceJS', function() {
-    gulp.src('server/views/index.html')
+    gulp.src('index.html')
       .pipe(htmlreplace({
         'js': 'client/app.min.js'
       }))
