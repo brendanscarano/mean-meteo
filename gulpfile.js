@@ -22,7 +22,7 @@
 
   gulp.task('concatScripts', function() {
     return gulp.src([
-      'client/lib/**/*',
+      // 'client/lib/**/*',
       'client/js/**/*.js',
       'client/public/*.js'
     ])
@@ -43,7 +43,7 @@
 
   gulp.task('minifyScripts',['templateCache'], function() {
     return gulp.src('client/app.js')
-      // .pipe(uglify())
+      .pipe(uglify())
       .pipe(rename('app.min.js'))
       .pipe(gulp.dest('client'));
   })
@@ -82,7 +82,8 @@
   });
  
   gulp.task('watch', function() {
-    gulp.watch('client/js/**/*', ['minifyScripts'])
+    gulp.watch('client/js/**/*.js', ['minifyScripts'])
+    gulp.watch('client/js/**/*.scss', ['compileSass'])
   })
 
   gulp.task('replaceJS', function() {

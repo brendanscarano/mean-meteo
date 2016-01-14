@@ -1,3 +1,10 @@
+/**
+YARGS 
+
+var argv = require('yargs');
+NODE --DEV look for dev flag to run local index.html otherwise run it in prod
+*/
+
 (function() {
  
   'use strict';
@@ -7,13 +14,24 @@
  
   /* GET home page. */
   router.get('/', function(req, res) {
-    res.render('index');
+    res.render('../../index');
   });
 
-  router.get('/weather/:lat/:lng', function(req, res) {
+  router.get('/address/:lat/:lng', function(req, res) {
 
-    console.log('hitting weather route');
-    console.log(req.params);
+    const latitude = req.params.lat;
+
+    const longitude = req.params.lng;
+
+    request('https://maps.googleapis.com/maps/api/geocode/json?address=' + latitude + ',' + longitude, function(error, response, body) {
+
+      res.send(response);
+
+    });
+
+  })
+
+  router.get('/weather/:lat/:lng', function(req, res) {
 
     var latitude = req.params.lat;
 

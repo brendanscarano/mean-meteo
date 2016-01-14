@@ -11,6 +11,15 @@
 
       navigator.geolocation.getCurrentPosition(function(response) {
 
+        $http.get('/address/' + response.coords.latitude + '/' + response.coords.longitude).then(function(res) {
+
+          var addressData = JSON.parse(res.data.body);
+          console.log(JSON.parse(res.data.body));
+
+          vm.address = addressData.results[0].formatted_address;
+
+        })
+
         $http.get('/weather/' + response.coords.latitude + '/' + response.coords.longitude).then(function(res) {
 
           console.log(JSON.parse(res.data.body));
@@ -33,9 +42,6 @@
       controllerAs: 'vm',
       scope: {},
       templateUrl: 'components/weather-forecast/weather-forecast.html'
-      // template: [
-      //   '<h1>Weather Forecast Directive</h1>'
-      // ].join('')
     };
 
   }
