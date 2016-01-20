@@ -48,11 +48,12 @@
   })
 
   gulp.task('compileSass', function() {
-    return gulp.src('client/js/**/*.scss')
+    return gulp.src('client/application.scss')
       .pipe(maps.init())
-      .pipe(concat('app.js'))
       .pipe(sass())
-      .pipe(rename('application.css'))
+      // second part of maps.init => shows where maps should...
+      // in relation to the gulp.dest
+      .pipe(maps.write('./'))
       .pipe(gulp.dest('client/css'));
   })
 
@@ -103,10 +104,6 @@
   })
 
   gulp.task('serve', ['watch']);
-
-  // gulp.task('default', ['clean'], function() {
-  //   gulp.start('build');
-  // });
 
   gulp.task('default', ['clean', 'start', 'watch']);
 
