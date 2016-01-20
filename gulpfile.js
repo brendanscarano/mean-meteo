@@ -47,9 +47,6 @@
       .pipe(gulp.dest('client'));
   })
 
-
-
-
   gulp.task('compileSass', function() {
     return gulp.src('client/js/**/*.scss')
       .pipe(maps.init())
@@ -85,9 +82,23 @@
       .pipe(gulp.dest('dist'));
   })
 
+  gulp.task('bower', function() {
+    // return gulp.src(mainbowerFiles(), {
+    //     base: 'client/lib'
+    //   })
+    // return gulp.src(mainbowerFiles({ paths: {
+    //     bowerJson: 'bower.json',
+    //     bowerDirectory: 'client/lib'
+    //   }}))
+    return gulp.src(mainbowerFiles({paths: {bowerJson: 'bower.json', bowerDirectory: 'client/lib'}}))
+      // .pipe(uglify())
+      .pipe(concat('bower.min.js'))
+      .pipe(gulp.dest('client'));
+  })
+
   // base option keeps directories in check
-  gulp.task('build', ['clean', 'replaceJS', 'minifyScripts'], function() {
-    return gulp.src(['client/app.min.js', 'node_modules', 'server/**/*'], {base: './'})
+  gulp.task('build', ['clean', 'replaceJS', 'compileSass', 'bower' ,'minifyScripts'], function() {
+    return gulp.src(['client/css/application.css', 'client/app.min.js', 'client/bower.min.js', 'node_modules', 'server/**/*'], {base: './'})
           .pipe(gulp.dest('dist'));
   })
 
@@ -97,18 +108,7 @@
   //   gulp.start('build');
   // });
 
-  gulp.task('default', ['start', 'watch']);
+  gulp.task('default', ['clean', 'start', 'watch']);
 
 }());
 
-// gulp.task('bower', function() {
-//   // return gulp.src(mainbowerFiles(), {
-//   //     base: 'client/lib'
-//   //   })
-//   return gulp.src(mainbowerFiles({ paths: {
-//       bowerJson: 'bower.json',
-//       bowerDirectory: 'client/lib'
-//     }}))
-//     .pipe(rename('bower.min.js'))
-//     .pipe(gulp.dest('client'));
-// })
