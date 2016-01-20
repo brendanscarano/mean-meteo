@@ -8,7 +8,7 @@
           ng-repeat="day in vm.hourlyForecast.data | limitTo: 8 track by $index">
         <div>
           {{day.time | convertHourlyTime}}<br />
-          <!-- <i class="{{day.icon | convertIconEmoji}}"></i><br /> -->
+          <i class="{{day.icon | convertIconEmoji}}"></i><br />
           {{vm.Math.round(day.temperature)}}<br />
         </div>
       </li>
@@ -21,8 +21,7 @@
           ng-repeat="day in vm.dailyForecast.data | limitTo: 5 track by $index"
           ng-mouseover="showSummary = true" ng-mouseleave="showSummary = false">
         {{day.time | convertDailyTime}}<br />
-        <!-- <i class="{{day.icon | convertIconEmoji}}"></i><br /> -->
-
+        <i class="{{day.icon | convertIconEmoji}}"></i><br />
         {{vm.Math.floor(day.temperatureMax)}} / {{vm.Math.floor(day.temperatureMin)}}
 
         <div ng-show="showSummary">
