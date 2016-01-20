@@ -105,7 +105,7 @@
 
   gulp.task('serve', ['watch']);
 
-  gulp.task('default', ['clean', 'start', 'watch']);
+  gulp.task('default', ['clean', 'build', 'start', 'watch']);
 
 }());
 
