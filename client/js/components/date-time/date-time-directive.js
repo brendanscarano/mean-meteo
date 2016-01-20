@@ -5,15 +5,13 @@
 
     function dateTimeCtrl() {
 
-      let vm = this;
+      this.todaysDate = moment().format('dddd MMMM DD YYYY');
 
-      vm.todaysDate = moment().format('dddd MMMM DD YYYY');
-
-      let updateTime = function(){
+      let updateTime = () => {
 
         let now = moment().format('hh:mm:ss A');
 
-        vm.currentTime = now;
+        this.currentTime = now;
         $timeout(updateTime, 1000);
 
       };
