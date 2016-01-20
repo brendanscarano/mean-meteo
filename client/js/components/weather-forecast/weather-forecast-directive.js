@@ -5,30 +5,29 @@
 
     function weatherForecastCtrl() {
 
-      var vm = this;
+      this.Math = window.Math;
 
-      vm.Math = window.Math;
+      navigator.geolocation.getCurrentPosition((response) => {
 
-      navigator.geolocation.getCurrentPosition(function(response) {
+        let addressAPICall = `/address/${response.coords.latitude}/${response.coords.longitude}`;
 
-        $http.get('/address/' + response.coords.latitude + '/' + response.coords.longitude).then(function(res) {
+        let weatherAPICall = `/weather/${response.coords.latitude}/${response.coords.longitude}`;
 
-          var addressData = JSON.parse(res.data.body);
-          console.log(JSON.parse(res.data.body));
+        $http.get(addressAPICall).then((res) => {
 
-          vm.address = addressData.results[0].formatted_address;
+          const addressData = JSON.parse(res.data.body);
+
+          this.address = addressData.results[0].formatted_address;
 
         })
 
-        $http.get('/weather/' + response.coords.latitude + '/' + response.coords.longitude).then(function(res) {
+        $http.get(weatherAPICall).then((res) => {
 
-          console.log(JSON.parse(res.data.body));
+          const data = JSON.parse(res.data.body);
 
-          var data = JSON.parse(res.data.body);
+          this.hourlyForecast = data.hourly;
 
-          vm.hourlyForecast = data.hourly;
-
-          vm.dailyForecast = data.daily;
+          this.dailyForecast = data.daily;
 
         })
 

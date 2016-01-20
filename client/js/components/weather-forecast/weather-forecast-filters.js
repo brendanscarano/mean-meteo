@@ -24,7 +24,7 @@
 
     return function( input ) {
 
-      var weatherIcons = {
+      const weatherIcons = {
         'clear-day': 'twa twa-sunny',
         'clear-night': 'twa twa-moon',
         'cloudy': 'twa twa-cloud',
