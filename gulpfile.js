@@ -22,15 +22,14 @@
 
   gulp.task('concatScripts', function() {
     return gulp.src([
-      // 'client/lib/**/*',
       'client/js/**/*.js',
       'client/public/*.js'
     ])
     .pipe(maps.init())
     .pipe(concat('app.js'))
-    // .pipe(babel({
-    //   presets: ['es2015']
-    // }))
+    .pipe(babel({
+      presets: ['es2015']
+    }))
     .pipe(maps.write('./'))
     .pipe(gulp.dest('client'));
   })
@@ -47,6 +46,9 @@
       .pipe(rename('app.min.js'))
       .pipe(gulp.dest('client'));
   })
+
+
+
 
   gulp.task('compileSass', function() {
     return gulp.src('client/js/**/*.scss')
@@ -65,24 +67,13 @@
     })
   })
 
-  // gulp.task('bower', function() {
-  //   // return gulp.src(mainbowerFiles(), {
-  //   //     base: 'client/lib'
-  //   //   })
-  //   return gulp.src(mainbowerFiles({ paths: {
-  //       bowerJson: 'bower.json',
-  //       bowerDirectory: 'client/lib'
-  //     }}))
-  //     .pipe(rename('bower.min.js'))
-  //     .pipe(gulp.dest('client'));
-  // })
-
   gulp.task('clean', function() {
     del(['dist', 'client/app*.js*', 'client/bower.min.js']);
   });
  
   gulp.task('watch', function() {
-    gulp.watch('client/js/**/*.js', ['minifyScripts'])
+    gulp.watch('client/js/**/*.js', ['concatScripts'])
+    gulp.watch('client/js/**/*.html', ['minifyScripts'])
     gulp.watch('client/js/**/*.scss', ['compileSass'])
   })
 
@@ -95,51 +86,29 @@
   })
 
   // base option keeps directories in check
-  gulp.task('build', ['replaceJS', 'minifyScripts'], function() {
+  gulp.task('build', ['clean', 'replaceJS', 'minifyScripts'], function() {
     return gulp.src(['client/app.min.js', 'node_modules', 'server/**/*'], {base: './'})
           .pipe(gulp.dest('dist'));
   })
 
   gulp.task('serve', ['watch']);
 
-  gulp.task('default', ['clean'], function() {
-    gulp.start('build');
-  });
+  // gulp.task('default', ['clean'], function() {
+  //   gulp.start('build');
+  // });
 
-  // //register nodemon task
-  // gulp.task('nodemon', function() {
-  //   nodemon({
-  //     script: 'server/app.js',
-  //     env: {
-  //       'NODE_ENV': 'development'
-  //     }
-  //   })
-  //     .on('restart');
-  // });
- 
-  // // Rerun the task when a file changes
-  // gulp.task('watch', function() {
-  //   livereload.listen();
-  //   gulp.src(_paths, {
-  //     read: false
-  //   })
-  //     .pipe(watch({
-  //       emit: 'all'
-  //     }))
-  //     .pipe(jshint())
-  //     .pipe(jshint.reporter('default'));
-  //   watch(_paths, livereload.changed);
-  // });
- 
-  // //lint js files
-  // gulp.task('lint', function() {
-  //   gulp.src(_paths)
-  //     .pipe(jshint())
-  //     .pipe(jshint.reporter('default'));
-  // });
- 
- 
-  // // The default task (called when you run `gulp` from cli)
-  // gulp.task('default', ['lint', 'nodemon', 'watch']);
- 
+  gulp.task('default', ['start', 'watch']);
+
 }());
+
+// gulp.task('bower', function() {
+//   // return gulp.src(mainbowerFiles(), {
+//   //     base: 'client/lib'
+//   //   })
+//   return gulp.src(mainbowerFiles({ paths: {
+//       bowerJson: 'bower.json',
+//       bowerDirectory: 'client/lib'
+//     }}))
+//     .pipe(rename('bower.min.js'))
+//     .pipe(gulp.dest('client'));
+// })
