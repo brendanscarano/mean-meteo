@@ -27,4 +27,6 @@ build/Release
 node_modules
 client/lib
 
-client/js/components/date-time/es5-date-time-directive.js
+client/*.min*.js
+dist/
+client/js/es5_backups
