@@ -12,16 +12,28 @@
     rename         = require('gulp-rename'),
     maps           = require('gulp-sourcemaps'),
     htmlreplace    = require('gulp-html-replace'),
-    mainbowerFiles = require('main-bower-files'),
     del            = require('del'),
     nodemon        = require('gulp-nodemon'),
-    babel          = require('gulp-babel'),
+    babelify       = require('babelify'),
     templateCache  = require('gulp-angular-templatecache'),
     browserify     = require('browserify'),
     source         = require('vinyl-source-stream'),
     _paths         = ['server/**/*.js', 'client/js/*.js'];
 
 
+  // gulp.task('concatScripts', function() {
+  //   return gulp.src([
+  //     'client/js/**/*.js',
+  //     'client/public/*.js'
+  //   ])
+  //   .pipe(maps.init())
+  //   .pipe(concat('app.js'))
+  //   .pipe(babel({
+  //     presets: ['es2015']
+  //   }))
+  //   .pipe(maps.write('./'))
+  //   .pipe(gulp.dest('client'));
+  // })
   gulp.task('concatScripts', function() {
     return gulp.src([
       'client/js/**/*.js',
@@ -29,14 +41,25 @@
     ])
     .pipe(maps.init())
     .pipe(concat('app.js'))
-    .pipe(babel({
-      presets: ['es2015']
-    }))
+    // .pipe(babel({
+    //   presets: ['es2015']
+    // }))
     .pipe(maps.write('./'))
-    .pipe(gulp.dest('client'));
+    .pipe(gulp.dest('client/bundle'));
   })
 
-  gulp.task('templateCache', ['concatScripts'], function () {
+  gulp.task('browserify', ['concatScripts'], function() {
+    return browserify({
+      entries: 'client/bundle/app.js',
+      debug: true
+    })
+    .transform(babelify)
+    .bundle()
+    .pipe(source('bundle.js'))
+    .pipe(gulp.dest('client/bundle'))
+  })
+
+  gulp.task('templateCache', ['browserify'], function () {
     return gulp.src('client/js/**/*.html')
       .pipe(templateCache({standalone: true}))
       .pipe(gulp.dest('client/public'));
@@ -46,7 +69,7 @@
     return gulp.src('client/app.js')
       .pipe(uglify())
       .pipe(rename('app.min.js'))
-      .pipe(gulp.dest('client'));
+      .pipe(gulp.dest('client/bundle'));
   })
 
   gulp.task('compileSass', function() {
@@ -68,7 +91,7 @@
   })
 
   gulp.task('clean', function() {
-    del(['dist', 'client/app*.js*', 'client/bower.min.js']);
+    del(['dist', 'client/bundle']);
   });
  
   gulp.task('watch', function() {
@@ -85,23 +108,9 @@
       .pipe(gulp.dest('dist'));
   })
 
-  gulp.task('bower', function() {
-    // return gulp.src(mainbowerFiles(), {
-    //     base: 'client/lib'
-    //   })
-    // return gulp.src(mainbowerFiles({ paths: {
-    //     bowerJson: 'bower.json',
-    //     bowerDirectory: 'client/lib'
-    //   }}))
-    return gulp.src(mainbowerFiles({paths: {bowerJson: 'bower.json', bowerDirectory: 'client/lib'}}))
-      // .pipe(uglify())
-      .pipe(concat('bower.min.js'))
-      .pipe(gulp.dest('client'));
-  })
-
   // base option keeps directories in check
-  gulp.task('build', ['clean', 'replaceJS', 'compileSass', 'bower' ,'minifyScripts'], function() {
-    return gulp.src(['client/css/application.css', 'client/app.min.js', 'client/bower.min.js', 'node_modules', 'server/**/*'], {base: './'})
+  gulp.task('build', ['clean', 'replaceJS', 'compileSass','minifyScripts'], function() {
+    return gulp.src(['client/css/application.css', 'client/bundle/*', 'node_modules', 'server/**/*'], {base: './'})
           .pipe(gulp.dest('dist'));
   })
 
