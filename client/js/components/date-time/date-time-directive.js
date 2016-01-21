@@ -5,6 +5,7 @@ const moment = require('moment');
 
   function dateTime( $timeout ) {
 
+    console.log('testing')
     function dateTimeCtrl() {
 
       this.todaysDate = moment().format('dddd MMMM DD YYYY');

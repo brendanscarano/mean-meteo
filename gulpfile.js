@@ -11,7 +11,6 @@
     sass           = require('gulp-sass'),
     rename         = require('gulp-rename'),
     maps           = require('gulp-sourcemaps'),
-    htmlreplace    = require('gulp-html-replace'),
     del            = require('del'),
     nodemon        = require('gulp-nodemon'),
     babelify       = require('babelify'),
@@ -100,16 +99,8 @@
     gulp.watch('client/js/**/*.scss', ['compileSass'])
   })
 
-  gulp.task('replaceJS', function() {
-    gulp.src('index.html')
-      .pipe(htmlreplace({
-        'js': 'client/app.min.js'
-      }))
-      .pipe(gulp.dest('dist'));
-  })
-
   // base option keeps directories in check
-  gulp.task('build', ['clean', 'replaceJS', 'compileSass','minifyScripts'], function() {
+  gulp.task('build', ['clean', 'compileSass','minifyScripts'], function() {
     return gulp.src(['client/css/application.css', 'client/bundle/*', 'node_modules', 'server/**/*'], {base: './'})
           .pipe(gulp.dest('dist'));
   })
