@@ -2,7 +2,7 @@
 
   function convertHourlyTime() {
 
-    return function( input ) {
+    return ( input ) => {
 
       return moment.unix(input).format('h:mm a');
 
@@ -12,7 +12,7 @@
 
   function convertDailyTime() {
 
-    return function( input ) {
+    return ( input ) => {
 
       return moment.unix(input).format('dddd');
 
@@ -22,7 +22,7 @@
 
   function convertIconEmoji() {
 
-    return function( input ) {
+    return ( input ) => {
 
       const weatherIcons = {
         'clear-day': 'twa twa-sunny',
