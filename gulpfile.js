@@ -17,6 +17,8 @@
     nodemon        = require('gulp-nodemon'),
     babel          = require('gulp-babel'),
     templateCache  = require('gulp-angular-templatecache'),
+    browserify     = require('browserify'),
+    source         = require('vinyl-source-stream'),
     _paths         = ['server/**/*.js', 'client/js/*.js'];
 
 
