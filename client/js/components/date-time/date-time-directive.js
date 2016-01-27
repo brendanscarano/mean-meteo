@@ -1,3 +1,4 @@
+import angular from 'angular';
 import moment from 'moment';
 
 (function() {
@@ -5,8 +6,9 @@ import moment from 'moment';
 
   function dateTime( $timeout ) {
 
-    console.log('testing')
     function dateTimeCtrl() {
+
+      console.log('testing');
 
       this.todaysDate = moment().format('dddd MMMM DD YYYY');
 

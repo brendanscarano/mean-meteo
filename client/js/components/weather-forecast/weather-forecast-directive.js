@@ -1,19 +1,21 @@
+import angular from 'angular';
+
 (function() {
   'use strict';
 
-  function dateTime( $timeout, $http ) {
+  function dateTime( $http ) {
 
     function weatherForecastCtrl() {
 
       this.Math = window.Math;
 
-      navigator.geolocation.getCurrentPosition((response) => {
+      navigator.geolocation.getCurrentPosition( (response) => {
 
         let addressAPICall = `/address/${response.coords.latitude}/${response.coords.longitude}`;
 
         let weatherAPICall = `/weather/${response.coords.latitude}/${response.coords.longitude}`;
 
-        $http.get(addressAPICall).then((res) => {
+        $http.get(addressAPICall).then( (res) => {
 
           const addressData = JSON.parse(res.data.body);
 
@@ -21,7 +23,7 @@
 
         })
 
-        $http.get(weatherAPICall).then((res) => {
+        $http.get(weatherAPICall).then( (res) => {
 
           const data = JSON.parse(res.data.body);
 
@@ -47,6 +49,6 @@
 
   angular
     .module('WeatherForecastDirective', ['WeatherForecastFilters'])
-    .directive('weatherForecast', ['$timeout', '$http', dateTime]);
+    .directive('weatherForecast', ['$http', dateTime]);
 
 })();

@@ -1,3 +1,6 @@
+import angular from 'angular';
+import moment from 'moment';
+
 (function() {
 
   function convertHourlyTime() {
