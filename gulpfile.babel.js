@@ -12,10 +12,11 @@ import rename         from 'gulp-rename';
 import maps           from 'gulp-sourcemaps';
 import del            from 'del';
 import babelify       from 'babelify';
+import glob           from 'glob';
 import templateCache  from 'gulp-angular-templatecache';
 import browserify     from 'browserify';
+import buffer         from 'vinyl-buffer'
 import source         from 'vinyl-source-stream';
-import exorcist       from 'exorcist';
 const _paths          = ['server/**/*.js', 'client/js/*.js'];
 
 // gulp.task('concatScripts', function() {
@@ -31,27 +32,43 @@ const _paths          = ['server/**/*.js', 'client/js/*.js'];
 //   .pipe(maps.write('./'))
 //   .pipe(gulp.dest('client'));
 // })
-gulp.task('concatScripts', function() {
-  return gulp.src([
-    'client/js/**/*.js',
-    'client/public/*.js'
-  ])
-  .pipe(maps.init())
-  .pipe(concat('app.js'))
-  .pipe(maps.write('./'))
-  .pipe(gulp.dest('client/bundle'));
-})
+// gulp.task('concatScripts', function() {
+//   return gulp.src([
+//     'client/js/**/*.js',
+//     'client/public/*.js'
+//   ])
+//   // .pipe(maps.init())
+//   .pipe(concat('app.js'))
+//   // .pipe(maps.write('./'))
+//   .pipe(gulp.dest('client/bundle'));
+// })
 
-gulp.task('browserify', ['concatScripts'], function() {
-  return browserify({
-    entries: 'client/bundle/app.js',
-    debug: true
-  })
-  .transform(babelify)
-  .bundle()
-  .pipe(exorcist('client/bundle/bundle.js.map'))
-  .pipe(source('bundle.js'))
-  .pipe(gulp.dest('client/bundle'))
+// gulp.task('browserify', ['concatScripts'], function() {
+//   return browserify({entries: 'client/bundle/app.js', debug: true})
+//       .transform(babelify)
+//       .bundle()
+//       .pipe(source('app.js'))
+//       .pipe(buffer())
+//       // .pipe(maps.init())
+//       .pipe(uglify())
+//       // .pipe(maps.write('./'))
+//       .pipe(gulp.dest('client/bundle'));
+// })
+gulp.task('browserify', function() {
+  var testFiles = glob.sync(
+        'client/js/**/*.js'
+      );
+  var tetFiles2 = glob.sync('client/public/*.js');
+  var filesToTest = testFiles.concat(tetFiles2);
+  return browserify({entries: filesToTest, debug: true})
+      .transform(babelify)
+      .bundle()
+      .pipe(source('app.js'))
+      .pipe(buffer())
+      .pipe(maps.init({loadMaps: true}))
+      .pipe(uglify())
+      .pipe(maps.write('./'))
+      .pipe(gulp.dest('client/bundle'));
 })
 
 gulp.task('templateCache', ['browserify'], function () {
@@ -97,12 +114,13 @@ gulp.task('watch', function() {
 
 // base option keeps directories in check
 gulp.task('build', ['clean', 'compileSass','minifyScripts'], function() {
-  return gulp.src(['client/css/application.css', 'client/bundle/*.js', 'node_modules', 'server/**/*', 'index.html'], {base: './'})
+  return gulp.src(['client/css/*', 'client/bundle/*.js', 'node_modules', 'server/**/*', 'index.html'], {base: './'})
         .pipe(gulp.dest('dist'));
 })
 
 gulp.task('serve', ['watch']);
 
-gulp.task('default', ['clean', 'build', 'start', 'watch']);
+gulp.task('default', ['build', 'start', 'watch']);
 
 
+// http://macr.ae/article/gulp-and-babel.html

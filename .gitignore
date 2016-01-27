@@ -29,5 +29,5 @@ client/lib
 
 client/*.min*.js
 bundle/
-dist/
+
 client/js/es5_backups
